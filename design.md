@@ -2,14 +2,14 @@
 
 > **Product**: Logbook Gym Tracker PWA  
 > **Target Form Factor**: Mobile-First (OLED smartphones, iOS Safari / Android Chrome PWA)  
-> **Aesthetic Archetype**: Deep Carbon Dark Mode, High-Contrast Neon Accents, Chunky Tactile Controls  
+> **Aesthetic Archetype**: Matte Charcoal, Energetic Chartreuse, restrained high-contrast status colors
 > **Core Objective**: Frictionless, one-handed, sweat-resistant gym logging under harsh fluorescent lighting.
 
 ---
 
 ## 1. Executive Philosophy & Ergonomic Axioms
 
-Logging heavy lifts with chalk on hands and sweaty thumbs while resting between sets is an extreme operating environment. The UI/UX of Logbook is engineered under four strict physical axioms:
+Logging heavy lifts with chalk on hands and sweaty thumbs while resting between sets is an extreme operating environment. Logbook uses touch-first controls on phones and a wider navigation rail on desktop:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -21,8 +21,8 @@ Logging heavy lifts with chalk on hands and sweaty thumbs while resting between 
 │ 2. Bottom-Heavy Thumb Zone     │ All primary navigation, inputs, and   │
 │                                │ drawers sit in the lower 40% screen.  │
 ├────────────────────────────────┼───────────────────────────────────────┤
-│ 3. True-Black OLED Palette     │ Cuts blinding gym overhead glare,     │
-│    (#050508)                   │ maximizes contrast, saves battery.    │
+│ 3. Matte Charcoal Palette      │ Maintains comfortable contrast with   │
+│    (#0b0e0b)                   │ quiet surfaces and clear hierarchy.   │
 ├────────────────────────────────┼───────────────────────────────────────┤
 │ 4. Multi-Modal Sensory Cues    │ Haptic vibration + acoustic chime for │
 │                                │ hands-free rest timer expiration.     │
@@ -35,21 +35,21 @@ Logging heavy lifts with chalk on hands and sweaty thumbs while resting between 
 
 ### 2.1 Color Palette
 
-Logbook rejects low-contrast gray-on-gray aesthetics in favor of a true pitch-black base (`#050508`) paired with vivid, high-saturation semantic accents.
+Logbook uses a charcoal canvas (`#0b0e0b`) with matte green-charcoal surfaces. Energetic chartreuse (`#b8e62e`) marks primary actions and the active state; amber, sky, and rose remain reserved for their semantic statuses.
 
 | Token | Hex / Class | Semantic Role |
 | :--- | :--- | :--- |
-| **Canvas Background** | `#050508` | Root dark canvas, OLED pixel shutdown |
-| **Card / Surface Base** | `zinc-950` (`#09090b`) | Primary card elevation, drawers, modals |
-| **Elevated Surface** | `zinc-900` (`#18181b`) | Steppers, secondary buttons, input fields |
-| **Border / Divider** | `zinc-800/80` (`#27272a`) | Structural boundaries, subtle grid separators |
-| **Primary Accent (Neon Emerald)** | `emerald-400` (`#34d399`) | Primary CTAs, active sets, completed status, PRs |
+| **Canvas Background** | `#0b0e0b` | Root dark canvas |
+| **Card / Surface Base** | `zinc-950` (`#0b0e0b`) | Primary card elevation, drawers, modals |
+| **Elevated Surface** | `zinc-900` (`#151a15`) | Steppers, secondary buttons, input fields |
+| **Border / Divider** | `zinc-800/80` (`#272e27`) | Structural boundaries and separators |
+| **Primary Accent (Chartreuse)** | `emerald-400` (`#b8e62e`) | Primary CTAs, active sets, selected navigation |
 | **Analytics / Volume (Sky)** | `sky-400` (`#38bdf8`) | Volume metrics, routines, trendlines |
 | **Recovery / Admin (Electric Sky)** | `sky-400` (`#38bdf8`) | Sports recovery, administrator root badge |
 | **Warning / Rest Alert (Amber)** | `amber-400` (`#fbbf24`) | Rest timer countdown, 36h streak rescue |
 | **Destructive / Deficit (Rose)** | `rose-400` (`#fb7185`) | Delete set, cancel workout, high caloric deficit |
-| **Typography Primary** | `zinc-100` (`#f4f4f5`) | Headings, numerical data, active labels |
-| **Typography Secondary** | `zinc-400` (`#a1a1aa`) | Subtitles, target reps, unit labels |
+| **Typography Primary** | `zinc-100` (`#f2f5ef`) | Headings, numerical data, active labels |
+| **Typography Secondary** | `zinc-400` (`#aeb6a9`) | Subtitles, target reps, unit labels |
 | **Typography Muted** | `zinc-500` / `zinc-600` | Inactive hints, historical reference stamps |
 
 ### 2.2 Typography Hierarchy
@@ -93,16 +93,16 @@ Micro Badges:     10px / 0.625rem   font-bold   uppercase  tracking-widest
 
 ## 3. Shell & Navigation Architecture
 
-The shell is pinned between iOS Safe Area Insets (`env(safe-area-inset-top)` and `env(safe-area-inset-bottom)`), creating an unshakeable full-viewport experience.
+The shell fills the viewport and honors iOS safe-area insets. It adapts navigation to the device: a six-item bottom bar on phones and a persistent left rail from the medium breakpoint up. The content canvas can grow to 1500px while individual dashboards keep a readable measure.
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│ HEADER (Sticky Top, 54px)                              │
-│ [Logbook Icon] Logbook • Online/Synced       [Admin/Out]│
+│ HEADER (Sticky Top)                                   │
+│ [Logbook Icon] Logbook                    [Alerts] [Me]│
 ├────────────────────────────────────────────────────────┤
 │                                                        │
 │                   VIEWPORT CONTAINER                   │
-│               (max-w-md mx-auto w-full)                │
+│               (responsive content canvas)             │
 │                                                        │
 │  - Home / Workout / Diet / History / Progress / Profile│
 │                                                        │
@@ -110,22 +110,25 @@ The shell is pinned between iOS Safe Area Insets (`env(safe-area-inset-top)` and
 │ REST TIMER BAR (Floating overlay, bottom-36)           │
 │ [Timer Icon] RESTING 01:28   [-30s] [+30s] [X]         │
 ├────────────────────────────────────────────────────────┤
-│ BOTTOM NAVIGATION (Fixed Bottom, 64px)                 │
-│ [Home] [Workout 🟢] [Diet] [History] [Progress] [Profile│
+│ PHONE: bottom navigation  |  DESKTOP: left navigation  │
+│ [Home] [Workout] [Diet] [History] [Progress] [Profile] │
 └────────────────────────────────────────────────────────┘
 ```
 
 ### 3.1 Sticky Header (`Header.tsx`)
-- Left: Brand pill with dumbbell gradient badge (`from-emerald-600 to-teal-400`) and live sync dot.
-- Right: Role-based status pill (`Synced` / `Local`) and admin portal shortcut (visible strictly to authorized root emails).
+- Left: Logbook brand mark and product name.
+- Right: Current notices and session/recovery status, Profile access, and an admin shortcut for authorized accounts.
+- Sign-out, install, and data actions live in Profile rather than competing in the global header.
 
-### 3.2 Fixed Bottom Navigation (`BottomNav.tsx`)
+### 3.2 Responsive Navigation (`BottomNav.tsx`)
 - 6 dedicated icon destinations in a grid: `Home`, `Workout`, `Diet`, `History`, `Progress`, `Profile`.
-- Active Workout Indicator: Live pulsating ping badge on the `Workout` icon (`animate-ping bg-emerald-400`) when a training session is active in the background.
+- Phone layout: fixed bottom bar with safe-area padding.
+- Desktop layout: persistent left rail with readable labels and keyboard shortcut hints.
+- Active Workout Indicator: status dot on `Workout` when a session is active.
 
 ### 3.3 Active Rest Timer Bar (`RestTimerBar.tsx`)
 - Floating HUD placed immediately above the thumb zone.
-- Real-time proportional neon emerald progress bar (`bg-emerald-500/20`).
+- Real-time proportional chartreuse progress bar (`bg-emerald-500/20`).
 - Oversized quick-adjust touch steppers: `-30s`, `+30s`, and `X` (dismiss).
 
 ---

@@ -62,6 +62,7 @@ export const WorkoutDebriefModal: React.FC<WorkoutDebriefModalProps> = ({
   const [copiedText, setCopiedText] = useState(false);
   const [copiedImage, setCopiedImage] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const { sheetRef, handleProps } = useSwipeToDismiss({ onDismiss: onClose, isOpen });
 
@@ -142,7 +143,7 @@ export const WorkoutDebriefModal: React.FC<WorkoutDebriefModalProps> = ({
     canvas.height = aspectRatio === 'story' ? 1920 : 1080;
 
     drawWorkoutCard(ctx, shareData, aspectRatio, theme);
-  }, [isOpen, shareData, aspectRatio, theme]);
+  }, [isOpen, shareData, aspectRatio, theme, showShareOptions]);
 
   if (!isOpen) return null;
 
@@ -226,8 +227,8 @@ export const WorkoutDebriefModal: React.FC<WorkoutDebriefModalProps> = ({
               <Sparkles className="w-5 h-5 stroke-[2.5]" />
             </div>
             <div>
-              <h2 className="text-base font-black text-white tracking-tight">Workout Summary & Card</h2>
-              <p className="text-[11px] text-zinc-400">Debrief, save notes & share your stats</p>
+              <h2 className="text-base font-black text-white tracking-tight">Workout Summary</h2>
+              <p className="text-[11px] text-zinc-400">Review the session and save it to your log</p>
             </div>
           </div>
           <button
@@ -345,8 +346,14 @@ export const WorkoutDebriefModal: React.FC<WorkoutDebriefModalProps> = ({
             />
           </div>
 
-          {/* 4. Shareable Graphic Card Preview */}
-          <div className="space-y-2.5 pt-1">
+          {/* Sharing is optional and stays collapsed until requested. */}
+          <div className="pt-1">
+            <button type="button" onClick={() => setShowShareOptions((open) => !open)} aria-expanded={showShareOptions}
+              className="flex min-h-12 w-full items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-4 text-left text-sm font-semibold text-zinc-200 hover:border-zinc-700">
+              <span className="flex items-center gap-2"><Share2 className="h-4 w-4 text-emerald-300" />Share workout card</span>
+              <span className="text-xs text-zinc-500">{showShareOptions ? 'Hide options' : 'Optional'}</span>
+            </button>
+            {showShareOptions && <div className="mt-3 space-y-2.5">
             <div className="flex items-center justify-between px-1">
               <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1">
                 <Share2 className="w-3.5 h-3.5 text-indigo-400" />
@@ -484,7 +491,7 @@ export const WorkoutDebriefModal: React.FC<WorkoutDebriefModalProps> = ({
                 )}
               </button>
             </div>
-          </div>
+            </div>}
         </div>
 
         {/* Bottom Finish & Save Action */}

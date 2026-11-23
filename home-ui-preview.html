@@ -1,0 +1,296 @@
+<div id="logbook-home-preview" aria-label="Logbook Home screen preview">
+  <style>
+    #logbook-home-preview {
+      --p-bg: #080a08;
+      --p-screen: #0d100d;
+      --p-surface: #141914;
+      --p-surface-raised: #191f19;
+      --p-border: #2a3129;
+      --p-text: #f1f3ed;
+      --p-muted: #a1a99e;
+      --p-dim: #818a7e;
+      --p-lime: #b8e62e;
+      --p-lime-ink: #171b10;
+      --p-gold: #d7b965;
+      color: var(--p-text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 16px 8px 24px;
+      box-sizing: border-box;
+    }
+    #logbook-home-preview * { box-sizing: border-box; }
+    #logbook-home-preview .phone {
+      width: min(100%, 402px);
+      background: var(--p-screen);
+      border: 1px solid #293029;
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.34);
+    }
+    #logbook-home-preview .statusbar {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      color: #d9ded5;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .02em;
+    }
+    #logbook-home-preview .system-icons { display: flex; align-items: center; gap: 7px; color: #c6cdc2; }
+    #logbook-home-preview .battery { border: 1px solid #879082; width: 19px; height: 9px; border-radius: 3px; position: relative; }
+    #logbook-home-preview .battery::before { content: ""; position: absolute; inset: 1px 4px 1px 1px; border-radius: 1px; background: var(--p-lime); }
+    #logbook-home-preview .battery::after { content: ""; position: absolute; right: -3px; top: 2px; width: 2px; height: 4px; border-radius: 0 2px 2px 0; background: #879082; }
+    #logbook-home-preview .app-header {
+      min-height: 68px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #1d231d;
+      border-bottom: 1px solid var(--p-border);
+    }
+    #logbook-home-preview .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    #logbook-home-preview .brand-mark {
+      width: 38px; height: 38px; flex: 0 0 auto;
+      border-radius: 13px; display: grid; place-items: center;
+      background: var(--p-lime); color: var(--p-lime-ink);
+    }
+    #logbook-home-preview .brand-copy { line-height: 1.2; }
+    #logbook-home-preview .brand-name { font-size: 15px; font-weight: 730; letter-spacing: -.025em; }
+    #logbook-home-preview .brand-tagline { margin-top: 3px; color: var(--p-muted); font-size: 10px; }
+    #logbook-home-preview .header-actions { display: flex; align-items: center; gap: 8px; }
+    #logbook-home-preview .icon-button {
+      width: 38px; height: 38px; border: 1px solid var(--p-border); border-radius: 50%;
+      background: var(--p-surface); color: #d9ded5; display: grid; place-items: center;
+      position: relative; cursor: pointer;
+    }
+    #logbook-home-preview .icon-button:hover { background: var(--p-surface-raised); }
+    #logbook-home-preview .notice-count {
+      position: absolute; right: -3px; top: -4px; min-width: 16px; height: 16px;
+      padding: 0 4px; border-radius: 10px; display: grid; place-items: center;
+      background: var(--p-lime); color: var(--p-lime-ink); font-size: 9px; font-weight: 800;
+      border: 2px solid var(--p-screen);
+    }
+    #logbook-home-preview .avatar {
+      width: 38px; height: 38px; border: 1px solid var(--p-border); border-radius: 50%;
+      background: #1a2019; display: grid; place-items: center; color: #d8ded3;
+      font-size: 12px; font-weight: 700;
+    }
+    #logbook-home-preview .content { padding: 22px 18px 18px; }
+    #logbook-home-preview .date { color: #aeb7a8; font-size: 10px; font-weight: 730; letter-spacing: .15em; text-transform: uppercase; }
+    #logbook-home-preview h1 { margin: 8px 0 0; font-size: 27px; line-height: 1.12; letter-spacing: -.045em; font-weight: 760; }
+    #logbook-home-preview .intro { margin: 7px 0 0; color: var(--p-muted); font-size: 13px; line-height: 1.45; }
+    #logbook-home-preview .hero-action {
+      margin-top: 22px; width: 100%; min-height: 116px; border: 0; border-radius: 20px;
+      background: var(--p-lime); color: var(--p-lime-ink); padding: 18px 18px 18px 20px;
+      display: flex; align-items: center; justify-content: space-between; text-align: left;
+      cursor: pointer; transition: transform .15s ease, filter .15s ease;
+    }
+    #logbook-home-preview .hero-action:hover { filter: brightness(1.035); transform: translateY(-1px); }
+    #logbook-home-preview .hero-kicker { font-size: 10px; font-weight: 760; letter-spacing: .13em; text-transform: uppercase; color: #39432a; }
+    #logbook-home-preview .hero-title { margin-top: 9px; font-size: 22px; line-height: 1.12; font-weight: 760; letter-spacing: -.04em; }
+    #logbook-home-preview .hero-note { margin-top: 7px; color: #424c33; font-size: 11px; }
+    #logbook-home-preview .hero-play {
+      width: 48px; height: 48px; flex: 0 0 auto; border-radius: 15px; background: #1b2117;
+      color: #d3f36b; display: grid; place-items: center; margin-left: 10px;
+    }
+    #logbook-home-preview .alert-note {
+      display: none; margin-top: 10px; border: 1px solid #4b4228; border-radius: 13px;
+      padding: 10px 12px; color: #e5d8ae; background: #19170f; font-size: 11px;
+    }
+    #logbook-home-preview .section { margin-top: 25px; }
+    #logbook-home-preview .section-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 11px;
+    }
+    #logbook-home-preview .section-title { color: #d4d9d0; font-size: 11px; font-weight: 740; letter-spacing: .09em; text-transform: uppercase; }
+    #logbook-home-preview .section-link { color: var(--p-lime); border: 0; background: none; padding: 4px 0; font: inherit; font-size: 11px; font-weight: 650; cursor: pointer; white-space: nowrap; }
+    #logbook-home-preview .stats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    #logbook-home-preview .stat {
+      min-height: 91px; padding: 13px 14px 12px; border: 1px solid var(--p-border);
+      border-radius: 15px; background: var(--p-surface);
+    }
+    #logbook-home-preview .stat-label { color: var(--p-muted); font-size: 10px; font-weight: 650; letter-spacing: .04em; }
+    #logbook-home-preview .stat-value { margin-top: 8px; font-size: 23px; line-height: 1; font-weight: 760; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+    #logbook-home-preview .stat-value span { color: var(--p-muted); font-size: 11px; font-weight: 500; letter-spacing: 0; }
+    #logbook-home-preview .stat-caption { margin-top: 6px; color: var(--p-dim); font-size: 10px; }
+    #logbook-home-preview .record {
+      width: 100%; min-height: 66px; padding: 11px 13px; border: 1px solid var(--p-border);
+      border-radius: 15px; background: var(--p-surface); color: var(--p-text); display: flex;
+      align-items: center; gap: 11px; text-align: left; cursor: pointer;
+    }
+    #logbook-home-preview .record-icon { width: 30px; height: 30px; flex: 0 0 auto; border-radius: 10px; background: #242318; color: var(--p-gold); display: grid; place-items: center; }
+    #logbook-home-preview .record-main { min-width: 0; flex: 1; }
+    #logbook-home-preview .record-name { font-size: 12px; font-weight: 690; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #logbook-home-preview .record-meta { margin-top: 4px; color: var(--p-muted); font-size: 10px; }
+    #logbook-home-preview .record-weight { font-variant-numeric: tabular-nums; font-size: 16px; font-weight: 750; white-space: nowrap; }
+    #logbook-home-preview .record-weight small { color: var(--p-muted); font-size: 10px; font-weight: 500; }
+    #logbook-home-preview .routines { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    #logbook-home-preview .routine {
+      min-height: 67px; padding: 12px; border-radius: 15px; border: 1px solid var(--p-border);
+      background: var(--p-surface); color: var(--p-text); text-align: left; cursor: pointer;
+    }
+    #logbook-home-preview .routine:hover, #logbook-home-preview .record:hover { background: var(--p-surface-raised); }
+    #logbook-home-preview .routine-name { font-size: 12px; font-weight: 690; }
+    #logbook-home-preview .routine-action { margin-top: 6px; display: flex; align-items: center; gap: 4px; color: var(--p-muted); font-size: 10px; }
+    #logbook-home-preview .recovery-card {
+      min-height: 56px; padding: 10px 12px; border: 1px solid var(--p-border); border-radius: 14px;
+      background: var(--p-surface); display: flex; align-items: center; gap: 10px;
+    }
+    #logbook-home-preview .recovery-mark { width: 30px; height: 30px; border-radius: 10px; background: #20271d; color: var(--p-lime); display: grid; place-items: center; flex: 0 0 auto; }
+    #logbook-home-preview .recovery-copy { flex: 1; min-width: 0; }
+    #logbook-home-preview .recovery-title { font-size: 11px; font-weight: 690; }
+    #logbook-home-preview .recovery-detail { margin-top: 3px; color: var(--p-muted); font-size: 10px; }
+    #logbook-home-preview .text-action { border: 0; background: none; color: var(--p-lime); font: inherit; font-size: 10px; font-weight: 680; cursor: pointer; white-space: nowrap; }
+    #logbook-home-preview .secondary-recovery { margin-top: 8px; display: flex; justify-content: flex-end; }
+    #logbook-home-preview .bottom-nav {
+      margin-top: 22px; padding: 10px 8px 12px; display: grid; grid-template-columns: repeat(6,minmax(0,1fr));
+      border-top: 1px solid var(--p-border); background: #101410;
+    }
+    #logbook-home-preview .nav-item { min-width: 0; display: flex; align-items: center; flex-direction: column; gap: 5px; color: #929b90; font-size: 9px; font-weight: 570; }
+    #logbook-home-preview .nav-item.active { color: #c5ef3c; font-weight: 720; }
+    #logbook-home-preview .nav-item i { width: 17px; height: 17px; }
+    #logbook-home-preview .scrim { display: none; position: absolute; inset: 0; z-index: 5; background: rgba(0,0,0,.68); align-items: flex-end; }
+    #logbook-home-preview .phone { position: relative; }
+    #logbook-home-preview .sheet {
+      width: 100%; border: 1px solid #30382f; border-bottom: 0; border-radius: 22px 22px 0 0;
+      padding: 17px 18px 24px; background: #151a15; box-shadow: 0 -16px 50px rgba(0,0,0,.34);
+    }
+    #logbook-home-preview .sheet-handle { width: 34px; height: 4px; margin: 0 auto 17px; border-radius: 5px; background: #525a50; }
+    #logbook-home-preview .sheet-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    #logbook-home-preview .sheet-title { font-size: 16px; font-weight: 740; }
+    #logbook-home-preview .sheet-close { border: 0; color: var(--p-muted); background: transparent; font-size: 20px; cursor: pointer; }
+    #logbook-home-preview .sheet-copy { margin: 5px 0 14px; color: var(--p-muted); font-size: 11px; line-height: 1.45; }
+    #logbook-home-preview .sheet-option { width: 100%; margin-top: 8px; border: 1px solid var(--p-border); border-radius: 13px; padding: 12px; background: #101410; color: var(--p-text); text-align: left; cursor: pointer; }
+    #logbook-home-preview .sheet-option strong { display: block; font-size: 12px; }
+    #logbook-home-preview .sheet-option span { display: block; margin-top: 4px; color: var(--p-muted); font-size: 10px; }
+    #logbook-home-preview .sheet-primary { background: var(--p-lime); color: var(--p-lime-ink); border-color: var(--p-lime); }
+    #logbook-home-preview .sheet-primary span { color: #465035; }
+    #logbook-home-preview .modal-open .scrim { display: flex; }
+    #logbook-home-preview button:focus-visible { outline: 2px solid var(--p-lime); outline-offset: 2px; }
+    @media (max-width: 360px) {
+      #logbook-home-preview .content { padding-inline: 14px; }
+      #logbook-home-preview .app-header { padding-inline: 14px; }
+      #logbook-home-preview .brand-tagline { display: none; }
+      #logbook-home-preview .record-meta { font-size: 9px; }
+      #logbook-home-preview .nav-item { font-size: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #logbook-home-preview *, #logbook-home-preview *::before, #logbook-home-preview *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+  <section class="phone" aria-label="Logbook mobile Home screen">
+    <div class="statusbar"><span>9:41</span><span class="system-icons"><i data-lucide="signal" aria-hidden="true"></i><i data-lucide="wifi" aria-hidden="true"></i><span class="battery" aria-label="Battery"></span></span></div>
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark"><i data-lucide="dumbbell" aria-hidden="true"></i></div>
+        <div class="brand-copy"><div class="brand-name">Logbook</div><div class="brand-tagline">Training, made clear.</div></div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-button" type="button" aria-label="Notifications, 1 unread" data-open="notifications"><i data-lucide="bell" aria-hidden="true"></i><span class="notice-count">1</span></button>
+        <button class="icon-button" type="button" aria-label="Profile"><i data-lucide="user-round" aria-hidden="true"></i></button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="date">Tuesday, November 24</div>
+      <h1>Ready to train?</h1>
+      <p class="intro">Your next session starts here.</p>
+
+      <button class="hero-action" type="button" data-open="start">
+        <span><span class="hero-kicker">Today's session</span><span class="hero-title">Start a workout</span><span class="hero-note">Choose a routine or build as you go.</span></span>
+        <span class="hero-play"><i data-lucide="arrow-right" aria-hidden="true"></i></span>
+      </button>
+      <div class="alert-note">A time-sensitive training reminder can appear here without displacing the main workout action.</div>
+
+      <section class="section" aria-label="Training consistency">
+        <div class="section-head"><div class="section-title">Training consistency</div></div>
+        <div class="stats">
+          <div class="stat"><div class="stat-label">Streak</div><div class="stat-value">1 <span>day</span></div><div class="stat-caption">Keep your rhythm</div></div>
+          <div class="stat"><div class="stat-label">This week</div><div class="stat-value">1 <span>session</span></div><div class="stat-caption">Weekly consistency</div></div>
+        </div>
+      </section>
+
+      <section class="section" aria-label="Recent personal record">
+        <div class="section-head"><div class="section-title">Recent personal record</div><button class="section-link" type="button">View progress <span aria-hidden="true">›</span></button></div>
+        <button class="record" type="button">
+          <span class="record-icon"><i data-lucide="trophy" aria-hidden="true"></i></span>
+          <span class="record-main"><span class="record-name">Triceps bar pushdown</span><span class="record-meta">12 reps · Est. 1RM 53.2 kg</span></span>
+          <span class="record-weight">38 <small>kg</small></span>
+        </button>
+      </section>
+
+      <section class="section" aria-label="Quick routines">
+        <div class="section-head"><div class="section-title">Quick routines</div><button class="section-link" type="button">View all <span aria-hidden="true">›</span></button></div>
+        <div class="routines">
+          <button class="routine" type="button" data-routine="Push Day"><span class="routine-name">Push Day</span><span class="routine-action">Preview routine <i data-lucide="arrow-up-right" aria-hidden="true"></i></span></button>
+          <button class="routine" type="button" data-routine="Pull Day"><span class="routine-name">Pull Day</span><span class="routine-action">Preview routine <i data-lucide="arrow-up-right" aria-hidden="true"></i></span></button>
+        </div>
+      </section>
+
+      <section class="section" aria-label="Recovery">
+        <div class="section-head"><div class="section-title">Recovery</div></div>
+        <div class="recovery-card">
+          <span class="recovery-mark"><i data-lucide="moon" aria-hidden="true"></i></span>
+          <span class="recovery-copy"><span class="recovery-title">Sleep · Fair</span><span class="recovery-detail">Last logged · 5h · 4:00 to 9:00</span></span>
+          <button class="text-action" type="button">Log sleep <span aria-hidden="true">›</span></button>
+        </div>
+        <div class="secondary-recovery"><button class="text-action" type="button"><i data-lucide="activity" aria-hidden="true"></i> Log activity</button></div>
+      </section>
+    </main>
+    <nav class="bottom-nav" aria-label="Main navigation preview">
+      <div class="nav-item active"><i data-lucide="house" aria-hidden="true"></i><span>Home</span></div>
+      <div class="nav-item"><i data-lucide="dumbbell" aria-hidden="true"></i><span>Workout</span></div>
+      <div class="nav-item"><i data-lucide="utensils" aria-hidden="true"></i><span>Diet</span></div>
+      <div class="nav-item"><i data-lucide="history" aria-hidden="true"></i><span>History</span></div>
+      <div class="nav-item"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i><span>Progress</span></div>
+      <div class="nav-item"><i data-lucide="user-round" aria-hidden="true"></i><span>Profile</span></div>
+    </nav>
+    <div class="scrim" role="presentation" data-close>
+      <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="preview-sheet-title">
+        <div class="sheet-handle"></div>
+        <div class="sheet-top"><div class="sheet-title" id="preview-sheet-title">Start a workout</div><button class="sheet-close" type="button" aria-label="Close" data-close>×</button></div>
+        <p class="sheet-copy" id="preview-sheet-copy">Choose a blank session or preview a routine before starting.</p>
+        <button class="sheet-option sheet-primary" type="button" data-close><strong>Start empty workout</strong><span>Pick exercises as you go</span></button>
+        <button class="sheet-option" type="button" data-routine="Push Day"><strong>Preview Push Day</strong><span>Chest, shoulders and triceps</span></button>
+        <button class="sheet-option" type="button" data-routine="Pull Day"><strong>Preview Pull Day</strong><span>Back, rear delts and biceps</span></button>
+      </section>
+    </div>
+    <script>
+      (() => {
+        const root = document.getElementById('logbook-home-preview');
+        const copy = root.querySelector('#preview-sheet-copy');
+        const title = root.querySelector('#preview-sheet-title');
+        const open = (kind, routine) => {
+          root.classList.add('modal-open');
+          if (kind === 'notifications') {
+            title.textContent = 'Notifications';
+            copy.textContent = 'Current notices and reminder status. No notification history is stored.';
+            root.querySelector('.sheet-primary strong').textContent = 'System notice';
+            root.querySelector('.sheet-primary span').textContent = 'New workout summaries are ready to view';
+            root.querySelectorAll('.sheet-option:not(.sheet-primary)').forEach((item) => item.hidden = true);
+          } else if (routine) {
+            title.textContent = routine + ' preview';
+            copy.textContent = 'Review the routine before you start. Starting creates a workout with its planned exercises.';
+            root.querySelector('.sheet-primary strong').textContent = 'Start ' + routine;
+            root.querySelector('.sheet-primary span').textContent = 'Begin this routine';
+            root.querySelectorAll('.sheet-option:not(.sheet-primary)').forEach((item) => item.hidden = true);
+          } else {
+            title.textContent = 'Start a workout';
+            copy.textContent = 'Choose a blank session or preview a routine before starting.';
+            root.querySelector('.sheet-primary strong').textContent = 'Start empty workout';
+            root.querySelector('.sheet-primary span').textContent = 'Pick exercises as you go';
+            root.querySelectorAll('.sheet-option:not(.sheet-primary)').forEach((item) => item.hidden = false);
+          }
+        };
+        root.querySelectorAll('[data-open]').forEach((button) => button.addEventListener('click', () => open(button.dataset.open)));
+        root.querySelectorAll('[data-routine]').forEach((button) => button.addEventListener('click', () => open('routine', button.dataset.routine)));
+        root.querySelectorAll('[data-close]').forEach((button) => button.addEventListener('click', (event) => {
+          if (event.target === button || button.matches('.sheet-close, .sheet-option')) root.classList.remove('modal-open');
+        }));
+      })();
+    </script>
+  </section>
+</div>

@@ -58,7 +58,8 @@ export const SystemAnnouncementBanner: React.FC = () => {
     fetchLatest();
   }, []);
 
-  if (!announcement || !announcement.is_active || isDismissed) {
+  // Informational and positive updates live in the notification center; keep the banner for warnings.
+  if (!announcement || !announcement.is_active || isDismissed || announcement.type !== 'warning') {
     return null;
   }
 

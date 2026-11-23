@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
-/* Logbook's charcoal + electric-lime visual system, sampled from the supplied reference. */
+/* Logbook's charcoal + energetic chartreuse visual system. */
 @theme {
-  --color-emerald-300: #d8ff5e;
-  --color-emerald-400: #c5f600;
-  --color-emerald-500: #a9d900;
-  --color-emerald-600: #84ad00;
-  --color-emerald-700: #5d7a08;
-  --color-emerald-800: #3b4b10;
-  --color-emerald-900: #25300e;
-  --color-emerald-950: #151d0a;
-  --color-teal-300: #d8ff5e;
-  --color-teal-400: #c5f600;
-  --color-teal-500: #a9d900;
-  --color-teal-600: #84ad00;
+  --color-emerald-300: #d6fa7a;
+  --color-emerald-400: #b8e62e;
+  --color-emerald-500: #9aca1d;
+  --color-emerald-600: #78a313;
+  --color-emerald-700: #5a7a10;
+  --color-emerald-800: #3e5512;
+  --color-emerald-900: #293a12;
+  --color-emerald-950: #17210e;
+  --color-teal-300: #d6fa7a;
+  --color-teal-400: #b8e62e;
+  --color-teal-500: #9aca1d;
+  --color-teal-600: #78a313;
   --color-zinc-950: #0b0e0b;
   --color-zinc-900: #151a15;
   --color-zinc-850: #1b211b;
@@ -167,7 +167,7 @@ button:not([disabled])::after {
 }
 
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 2px solid #c5f600;
+  outline: 2px solid #b8e62e;
   outline-offset: 3px;
 }
 
@@ -214,7 +214,7 @@ input[type="number"] {
   border: 2px solid #111511;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #c5f600;
+  background: #b8e62e;
 }
 
 /* View Transitions API Standards */

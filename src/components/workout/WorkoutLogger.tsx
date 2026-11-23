@@ -174,7 +174,7 @@ export const WorkoutLogger: React.FC<WorkoutLoggerProps> = ({
   };
 
   return (
-    <div className="pb-44 px-4 pt-3 space-y-4">
+    <div className="space-y-4 px-4 pb-56 pt-4 sm:px-6 lg:px-8">
       {/* Top Header: Session Time & Discard Option */}
       <div className="flex items-center justify-between px-1">
         <div>
@@ -460,11 +460,6 @@ export const WorkoutLogger: React.FC<WorkoutLoggerProps> = ({
                           }}
                           className="w-full h-13 text-center font-mono font-black text-lg bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-xl text-white placeholder-zinc-600 focus:outline-none transition-colors"
                         />
-                        {prevSet && s.weight === 0 && (
-                          <div className="text-[9px] font-mono text-zinc-500 text-center mt-0.5">
-                            prev: {prevSet.weight}kg
-                          </div>
-                        )}
                       </div>
 
                       {/* Reps Input (With Ghost Placeholder from Previous Session) */}
@@ -483,10 +478,13 @@ export const WorkoutLogger: React.FC<WorkoutLoggerProps> = ({
                           }}
                           className="w-full h-13 text-center font-mono font-black text-lg bg-zinc-900 border border-zinc-800 focus:border-emerald-500 rounded-xl text-white placeholder-zinc-600 focus:outline-none transition-colors"
                         />
-                        {prevSet && s.reps === 0 && (
-                          <div className="text-[9px] font-mono text-zinc-500 text-center mt-0.5">
-                            prev: {prevSet.reps}
-                          </div>
+                        {prevSet && s.weight === 0 && s.reps === 0 && (
+                          <button type="button" onClick={() => {
+                            onUpdateSet(exItem.workoutExerciseId, s.id, { weight: prevSet.weight, reps: prevSet.reps });
+                            showToast(`Previous set copied: ${prevSet.weight} kg × ${prevSet.reps}`, 'success');
+                          }} className="mt-1 w-full truncate text-center text-[9px] font-semibold text-emerald-300 hover:text-emerald-200" aria-label={`Use previous set, ${prevSet.weight} kilograms for ${prevSet.reps} reps`}>
+                            Use last: {prevSet.weight} kg × {prevSet.reps}
+                          </button>
                         )}
                       </div>
 
@@ -541,8 +539,8 @@ export const WorkoutLogger: React.FC<WorkoutLoggerProps> = ({
       )}
 
       {/* BOTTOM-HEAVY WORKOUT CONTROL DOCK (Anchored in the lower third for natural thumb reach) */}
-      <div className="fixed bottom-[calc(4rem_+_env(safe-area-inset-bottom))] inset-x-0 z-30 p-3 pb-3 bg-gradient-to-t from-[#0b0e0b] via-zinc-950/95 to-transparent backdrop-blur-md">
-        <div className="max-w-md mx-auto grid grid-cols-2 gap-2.5">
+      <div className="fixed bottom-[calc(4.5rem_+_env(safe-area-inset-bottom))] inset-x-0 z-30 bg-gradient-to-t from-[#0b0e0b] via-zinc-950/95 to-transparent p-3 pb-3 backdrop-blur-md md:bottom-4 md:left-56 md:right-0">
+        <div className="mx-auto grid max-w-3xl grid-cols-2 gap-2.5">
           <button
             onClick={() => setIsPickerOpen(true)}
             className="h-14 rounded-2xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-100 text-sm font-bold flex items-center justify-center gap-2 active-press shadow-lg transition-all"

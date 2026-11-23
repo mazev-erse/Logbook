@@ -10,6 +10,7 @@ interface RestTimerBarProps {
   onEnableNotifications?: () => void;
   onAddTime: (seconds: number) => void;
   onReset: () => void;
+  isWorkoutActive?: boolean;
 }
 
 export const RestTimerBar: React.FC<RestTimerBarProps> = ({
@@ -20,13 +21,14 @@ export const RestTimerBar: React.FC<RestTimerBarProps> = ({
   onEnableNotifications,
   onAddTime,
   onReset,
+  isWorkoutActive = false,
 }) => {
   if (!isActive || remainingSeconds <= 0) return null;
 
   const progressPercent = Math.min(100, Math.max(0, (remainingSeconds / initialSeconds) * 100));
 
   return (
-    <div className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] inset-x-2 sm:inset-x-4 max-w-md md:max-w-2xl lg:max-w-3xl mx-auto z-40 animate-in fade-in slide-in-from-bottom-3 duration-150">
+    <div className={`fixed ${isWorkoutActive ? 'bottom-[calc(9.5rem+env(safe-area-inset-bottom,0px))] md:bottom-[calc(6.5rem+env(safe-area-inset-bottom,0px))]' : 'bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))]'} inset-x-2 z-40 mx-auto max-w-2xl animate-in fade-in slide-in-from-bottom-3 duration-150 sm:inset-x-4 md:left-[calc(14rem+1rem)] md:right-4`}>
       <div className="relative overflow-hidden rounded-2xl bg-[#101410] border border-emerald-400/70 shadow-2xl shadow-black p-2.5 sm:p-3.5 flex items-center justify-between gap-2">
         {/* Progress background fill in neon emerald */}
         <div

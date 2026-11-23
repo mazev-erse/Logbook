@@ -328,41 +328,33 @@ function GymTrackerApp() {
   }
 
   return (
-    <div className="h-dvh flex flex-col overflow-hidden bg-[#0b0e0b] text-zinc-100 max-w-md md:max-w-2xl lg:max-w-3xl mx-auto w-full relative shadow-[0_0_80px_rgba(0,0,0,0.24)]">
+    <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-[#0b0e0b] text-zinc-100">
       {/* Header */}
       <Header
         onNavigateToAdmin={() => setActiveTab('admin')}
-        onOpenShortcuts={() => setIsShortcutsOpen(true)}
-        subtitle={
-          activeWorkout
-            ? `Active: ${activeWorkout.name}`
-            : activeTab === 'routines'
-            ? 'Workout Routines & Templates'
-            : activeTab === 'admin'
-            ? 'System Administration & Users'
-            : activeTab === 'progress'
-            ? 'Analytics & Records'
-            : activeTab === 'diet'
-            ? 'Macro & Calorie Tracker'
-            : activeTab === 'history'
-            ? 'Past Sessions'
-            : activeTab === 'profile'
-            ? 'Personal Profile'
-            : undefined
-        }
+        onNavigateToProfile={() => navigateTab('profile')}
+        isWorkoutActive={Boolean(activeWorkout)}
+        restRemaining={remainingSeconds}
       />
 
       {/* Global System Announcement Banner */}
       <SystemAnnouncementBanner />
 
       {/* Main Content Views */}
+      <div className="flex min-h-0 flex-1">
+      <BottomNav
+        activeTab={activeTab === 'routines' ? 'workout' : activeTab === 'admin' ? 'profile' : activeTab}
+        onTabChange={navigateTab}
+        isWorkoutActive={Boolean(activeWorkout)}
+      />
       <main
         ref={mainRef}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain app-main-content origin-left"
+        className="app-main-content min-h-0 min-w-0 flex-1 origin-left overflow-y-auto overscroll-contain pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
       >
+        <div className="mx-auto w-full max-w-[1500px]">
         <div className={activeTab === 'home' ? 'block' : 'hidden'}>
           <HomeView
             activeWorkout={activeWorkout}
@@ -447,7 +439,9 @@ function GymTrackerApp() {
         <div className={activeTab === 'profile' ? 'block' : 'hidden'}>
           <Profile onNavigateToAdmin={() => navigateTab('admin')} onNavigateToLanding={() => navigateTab('landing')} />
         </div>
+        </div>
       </main>
+      </div>
 
       {/* Floating Rest Timer Bar */}
       <RestTimerBar
@@ -458,12 +452,6 @@ function GymTrackerApp() {
         onEnableNotifications={enableNotifications}
         onAddTime={addTime}
         onReset={resetTimer}
-      />
-
-      {/* Bottom Navigation */}
-      <BottomNav
-        activeTab={activeTab === 'routines' ? 'workout' : activeTab === 'admin' ? 'profile' : activeTab}
-        onTabChange={navigateTab}
         isWorkoutActive={Boolean(activeWorkout)}
       />
 

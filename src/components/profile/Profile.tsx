@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Camera, User as UserIcon, Check, Loader2, AlertCircle, Sparkles, Mail, Calendar, Database, ChevronRight, Shield, Smartphone, Download } from 'lucide-react';
+import { Camera, User as UserIcon, Check, Loader2, AlertCircle, Sparkles, Mail, Calendar, Database, ChevronRight, Shield, Smartphone, Download, LogOut } from 'lucide-react';
 import { usePWA } from '../../hooks/usePWA';
 import { supabase, isSupabaseConfigured } from '../../lib/supabaseClient';
 import { useAuth } from '../auth/ProtectedRoute';
@@ -18,7 +18,7 @@ interface ProfileProps {
 }
 
 export const Profile: React.FC<ProfileProps> = ({ onNavigateToAdmin, onNavigateToLanding }) => {
-  const { user, requireAuth } = useAuth();
+  const { user, requireAuth, signOut } = useAuth();
   const isAdmin = isAdminUser(user?.email);
   const { isInstalled, canInstall, installApp } = usePWA();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -242,7 +242,7 @@ export const Profile: React.FC<ProfileProps> = ({ onNavigateToAdmin, onNavigateT
   const displayImage = previewUrl || avatarUrl;
 
   return (
-    <div className="pb-32 px-4 pt-4 max-w-md mx-auto space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6 px-4 pb-32 pt-5 sm:px-6 lg:px-10">
       {/* Title */}
       <div className="px-1">
         <h2 className="text-xl font-black text-white tracking-tight">Your Profile</h2>
@@ -409,6 +409,15 @@ export const Profile: React.FC<ProfileProps> = ({ onNavigateToAdmin, onNavigateT
         </div>
       </form>
 
+      <section aria-label="Account actions" className="grid gap-3 sm:grid-cols-2">
+        {isAdmin && onNavigateToAdmin && <button type="button" onClick={onNavigateToAdmin} className="flex min-h-14 items-center justify-between rounded-2xl border border-sky-900/60 bg-sky-950/30 px-4 text-sm font-semibold text-sky-200 hover:bg-sky-950/50">
+          <span className="flex items-center gap-2"><Shield className="h-4 w-4" />Admin dashboard</span><ChevronRight className="h-4 w-4" />
+        </button>}
+        <button type="button" onClick={() => void signOut()} className="flex min-h-14 items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-4 text-sm font-semibold text-zinc-200 hover:border-rose-900/70 hover:text-rose-300">
+          <span className="flex items-center gap-2"><LogOut className="h-4 w-4" />Sign out</span><ChevronRight className="h-4 w-4" />
+        </button>
+      </section>
+
       {/* Trophy Cabinet & Achievements Section */}
       <div className="pt-2">
         <TrophyCabinet />
@@ -507,35 +516,6 @@ export const Profile: React.FC<ProfileProps> = ({ onNavigateToAdmin, onNavigateT
           )}
         </div>
       </div>
-
-      {/* Admin Panel Section (Only visible to admin email) */}
-      {isAdmin && onNavigateToAdmin && (
-        <div className="pt-2">
-          <button
-            type="button"
-            onClick={onNavigateToAdmin}
-            className="w-full p-4 rounded-2xl bg-sky-950/40 hover:bg-sky-900/50 border border-sky-800/60 hover:border-sky-700 text-left transition-all active-press flex items-center justify-between group shadow-lg shadow-sky-950/20"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-sky-300 group-hover:scale-105 transition-transform">
-                <Shield className="w-5 h-5 stroke-[2.5]" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-white">Admin Dashboard</h3>
-                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">
-                    Root
-                  </span>
-                </div>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Manage users, view platform metrics & directory
-                </p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-zinc-300 transition-colors shrink-0" />
-          </button>
-        </div>
-      )}
 
       <DataManagementModal
         isOpen={isDataModalOpen}
