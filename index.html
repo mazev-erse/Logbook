@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0e0b" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Logbook" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/pwa-512x512.png" />
+    <title>Logbook - Gym Tracker</title>
+    <script>
+      // Self-healing bootstrap for iOS WebClips and standalone PWAs
+      window.__resetLogbookApp = function () {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (r) { r.unregister(); });
+          });
+        }
+        if ('caches' in window) {
+          caches.keys().then(function (names) {
+            names.forEach(function (name) { caches.delete(name); });
+          });
+        }
+        window.location.reload();
+      };
+      window.addEventListener('error', function () {
+        var el = document.getElementById('pwa-fallback-btn');
+        if (el) el.style.display = 'inline-flex';
+      });
+      setTimeout(function () {
+        var root = document.getElementById('root');
+        var el = document.getElementById('pwa-fallback-btn');
+        if (root && root.dataset.mounted !== 'true' && el) {
+          el.style.display = 'inline-flex';
+        }
+      }, 3500);
+    </script>
+  </head>
+  <body class="bg-[#0b0e0b] text-[#f2f5ef] selection:bg-emerald-500/30 selection:text-emerald-300">
+    <div id="root" class="min-h-dvh flex flex-col items-center justify-center bg-[#0b0e0b] text-[#f2f5ef]">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:24px;text-align:center;">
+        <div style="width:52px;height:52px;border-radius:14px;background:#131813;border:1px solid #1f2a1f;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/>
+          </svg>
+        </div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#94a3b8;text-transform:uppercase;">Logbook</div>
+        <button id="pwa-fallback-btn" onclick="window.__resetLogbookApp()" style="display:none;margin-top:16px;padding:9px 18px;border-radius:9999px;background:#10b981;color:#022c22;font-size:12px;font-weight:700;border:none;cursor:pointer;">
+          Refresh &amp; Launch App
+        </button>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
