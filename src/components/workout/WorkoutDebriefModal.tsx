@@ -492,6 +492,7 @@ export const WorkoutDebriefModal: React.FC<WorkoutDebriefModalProps> = ({
               </button>
             </div>
             </div>}
+          </div>
         </div>
 
         {/* Bottom Finish & Save Action */}
